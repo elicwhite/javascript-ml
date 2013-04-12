@@ -3,13 +3,22 @@
 <head>
 <title>Untitled</title>
 <style type="text/css">
-    #canvas {
-        width:400px;
-        height:400px;
-        display:block;
-        margin:20px auto;
+    body {
+        font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .dot {
+        stroke: #000;
     }
 </style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="chart.js"></script>
 <script src="script.js"></script>
 </head>

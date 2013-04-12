@@ -1,63 +1,111 @@
-function Chart(canvas) {
+function Chart() {
     "use strict";
     var self = this;
 
-    var context = canvas.getContext('2d');
+    var margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 40
+    },
+    width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
-    var xPadding = 30;
-    var yPadding = 30;
+    var x = d3.scale.linear()
+        .range([0, width]);
 
-    var chartWidth = canvas.width - xPadding;
-    var chartHeight = canvas.height - yPadding;
+    var y = d3.scale.linear()
+        .range([height, 0]);
 
-    self.initialize = function(data) {
-        console.log("Setting up chart");
+    var color = d3.scale.category10();
 
-        self.drawAxis();
-        var range = getRange(data);
-        console.log(range);
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
 
-        logLabels(range);
-    };
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
 
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    self.drawAxis = function() {
-        function setAxisPen() {
-            context.lineWidth = 2;
-            context.strokeStyle = '#333';
-            context.font = 'italic 8pt sans-serif';
-            context.textAlign = "center";
-        }
+    d3.tsv("data.tsv", function(error, data) {
+        data.forEach(function(d) {
+            d.sepalLength = +d.sepalLength;
+            d.sepalWidth = +d.sepalWidth;
+        });
 
-        setAxisPen();
+        x.domain(d3.extent(data, function(d) {
+            return d.sepalWidth;
+        })).nice();
+        y.domain(d3.extent(data, function(d) {
+            return d.sepalLength;
+        })).nice();
 
-        // Draw the axises
-        context.beginPath();
-        context.moveTo(xPadding, 0);
-        context.lineTo(xPadding, canvas.height - yPadding);
-        context.lineTo(canvas.width, canvas.height - yPadding);
-        context.stroke();
-    };
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .append("text")
+            .attr("class", "label")
+            .attr("x", width)
+            .attr("y", -6)
+            .style("text-anchor", "end")
+            .text("Sepal Width (cm)");
 
-    function getRange(data) {
-        var range = {
-            minY: data[0].Y,
-            maxY: data[0].Y,
-            minX: data[0].X,
-            maxX: data[0].X
-        };
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("class", "label")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Sepal Length (cm)")
 
-        for (var i = 0; i < data.length; i++) {
-            range.minY = Math.min(range.minY, data[i].Y);
-            range.maxY = Math.max(range.maxY, data[i].Y);
-            range.minX = Math.min(range.minX, data[i].X);
-            range.maxX = Math.max(range.minX, data[i].X);
-        }
+        svg.selectAll(".dot")
+            .data(data)
+            .enter().append("circle")
+            .attr("class", "dot")
+            .attr("r", 3.5)
+            .attr("cx", function(d) {
+            return x(d.sepalWidth);
+        })
+            .attr("cy", function(d) {
+            return y(d.sepalLength);
+        })
+            .style("fill", function(d) {
+            return color(d.species);
+        });
 
-        return range;
-    }
+        var legend = svg.selectAll(".legend")
+            .data(color.domain())
+            .enter().append("g")
+            .attr("class", "legend")
+            .attr("transform", function(d, i) {
+            return "translate(0," + i * 20 + ")";
+        });
 
-    function logLabels(range) {
-        context.fillText(range.minX, xPadding+5, chartHeight+15)
-    }
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", color);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(d) {
+            return d;
+        });
+
+    });
+
 }
