@@ -50,7 +50,8 @@ function Chart(ele) {
             xNormal.domain(xExtended);
             yNormal.domain(yExtended);
 
-
+            var chartData = data.slice(0,-1);
+            var classifyDot = data.slice(-1);
 
             svg.append("g")
                 .attr("class", "x axis")
@@ -75,9 +76,24 @@ function Chart(ele) {
                 .text("Area (sq ft)");
 
             svg.selectAll(".dot")
-                .data(data)
+                .data(chartData)
                 .enter().append("circle")
                 .attr("class", "dot")
+                .attr("r", 3.5)
+                .attr("cx", function(d) {
+                return x(xNormal(d.rooms));
+            })
+                .attr("cy", function(d) {
+                return y(yNormal(d.area));
+            })
+                .style("fill", function(d) {
+                return color(d.rmtype);
+            });
+
+            svg.selectAll(".dot.classify")
+                .data(classifyDot)
+                .enter().append("circle")
+                .attr("class", "dot classify")
                 .attr("r", 3.5)
                 .attr("cx", function(d) {
                 return x(xNormal(d.rooms));
