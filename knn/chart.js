@@ -25,13 +25,14 @@ function Chart(ele) {
     var yAxis = d3.svg.axis().scale(y).orient("left");
 
 
-    self.load = function(data) {
+    self.load = function(origdata) {
         return function(classifyDot) {
             var graph = document.getElementById("graph");
             if (graph) {
                 graph.parentElement.removeChild(graph);
             }
 
+            var data = origdata.slice();
 
             data.push(classifyDot);
 
@@ -164,6 +165,30 @@ function Chart(ele) {
                 .text(function(d) {
                 return d;
             });
+
+            // Guess the type!
+            var types = {};
+            for (var i = 0; i < 3; i++) {
+                var node = chartData[i];
+                if (!types[node.rmtype]) {
+                    types[node.rmtype] = 0;
+                }
+
+                types[node.rmtype]++;
+            }
+
+            var guess = {
+                type: false,
+                count: 0
+            };
+            for (var type in types) {
+                if (types[type] > guess.count) {
+                    guess.type = type;
+                    guess.count = types[type];
+                }
+            }
+
+            return guess.type;
         };
     };
 

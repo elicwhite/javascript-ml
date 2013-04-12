@@ -3,11 +3,10 @@
 <head>
 <title>Untitled</title>
 <style type="text/css">
-    body {
-        font: 10px sans-serif;
-    }
+
 
     #chart {
+        font: 10px sans-serif;
         width: 800px;
         height: 450px;
         overflow: hidden;
@@ -24,6 +23,16 @@
     .dot {
         stroke: #000;
     }
+
+    span.label {
+        font-weight: bold;
+    }
+    #results {
+        font-size: 25px;
+
+        width: 300px;
+        margin: auto;
+    }
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="chart.js"></script>
@@ -31,6 +40,12 @@
 </head>
 <body>
     <div id="chart">
+    </div>
+    
+    <div id="results">
+        <span class="label">Rooms: </span><span id="rms"></span><br />
+        <span class="label">Area: </span><span id="area"></span><br />
+        <span class="label">Is a: </span><span id="cls"></span><br />
     </div>
 </body>
 </html>
