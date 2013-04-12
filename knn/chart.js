@@ -13,8 +13,12 @@ function Chart(ele) {
     var width = ele.offsetWidth - margin.left - margin.right;
     var height = ele.offsetHeight - margin.top - margin.bottom;
 
-    var x = d3.scale.linear().range([0, width]);
-    var y = d3.scale.linear().range([height, 0]);
+    var x = d3.scale.linear().domain([0,1]).range([0, width]);
+    var y = d3.scale.linear().domain([0,1]).range([height, 0]);
+
+    var xNormal = d3.scale.linear().range([0, 1]);
+    var yNormal = d3.scale.linear().range([0, 1]);
+
     var color = d3.scale.category10();
 
     var xAxis = d3.svg.axis().scale(x).orient("bottom");
@@ -35,16 +39,18 @@ function Chart(ele) {
                 d.area = parseInt(d.area, 10);
             });
 
-
-            // X axis is d.sepalWidth
-            x.domain(extendPercent(d3.extent(data, function(d) {
+            var xExtended = extendPercent(d3.extent(data, function(d) {
                 return d.rooms;
-            })));//.nice();
+            }));
 
-            // y axis is d.sepalLength
-            y.domain(extendPercent(d3.extent(data, function(d) {
+            var yExtended = extendPercent(d3.extent(data, function(d) {
                 return d.area;
-            })));//.nice();
+            }));
+
+            xNormal.domain(xExtended);
+            yNormal.domain(yExtended);
+
+
 
             svg.append("g")
                 .attr("class", "x axis")
@@ -74,10 +80,10 @@ function Chart(ele) {
                 .attr("class", "dot")
                 .attr("r", 3.5)
                 .attr("cx", function(d) {
-                return x(d.rooms);
+                return x(xNormal(d.rooms));
             })
                 .attr("cy", function(d) {
-                return y(d.area);
+                return y(yNormal(d.area));
             })
                 .style("fill", function(d) {
                 return color(d.rmtype);
@@ -110,6 +116,7 @@ function Chart(ele) {
     };
 
     // Extends an array by 10%
+
     function extendPercent(arr) {
         var diff = arr[1] - arr[0];
         diff = diff / 20.0;
