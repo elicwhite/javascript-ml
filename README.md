@@ -1,0 +1,1 @@
+Javascript implementation of some Machine Learning algorithms. JFL (Just for learning)
