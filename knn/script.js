@@ -10,9 +10,13 @@ window.onload = function() {
     d3.tsv("data.tsv", function(error, data) {
         classify = chart.load(data);
         run();
+        setInterval(run, 5000);
     });
 
     function run() {
-        classify({rooms: 6, area: 1200, rmtype: "classify"});
+        var r = Math.random()*10+1;
+        var a = Math.random()*1800+200;
+
+        classify({rooms: r, area: a, rmtype: "classify"});
     }
 };

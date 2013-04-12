@@ -24,16 +24,14 @@ function Chart(ele) {
     var xAxis = d3.svg.axis().scale(x).orient("bottom");
     var yAxis = d3.svg.axis().scale(y).orient("left");
 
-    var svg = d3.select(ele).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
 
     self.load = function(data) {
         return function(classifyDot) {
+            var graph = document.getElementById("graph");
+            if (graph) {
+                graph.parentElement.removeChild(graph);
+            }
+
 
             data.push(classifyDot);
 
@@ -65,6 +63,14 @@ function Chart(ele) {
             chartData.sort(function(a, b) {
                 return a.distance - b.distance;
             });
+
+
+            var svg = d3.select(ele).append("svg")
+                .attr("id", "graph")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             svg.append("g")
                 .attr("class", "x axis")
