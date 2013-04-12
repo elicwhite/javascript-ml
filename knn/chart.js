@@ -32,8 +32,11 @@ function Chart(ele) {
 
 
 
-    self.load = function() {
-        d3.tsv("data.tsv", function(error, data) {
+    self.load = function(data) {
+        return function(classifyDot) {
+
+            data.push(classifyDot);
+
             data.forEach(function(d) {
                 d.rooms = parseInt(d.rooms, 10);
                 d.area = parseInt(d.area, 10);
@@ -51,13 +54,16 @@ function Chart(ele) {
 
             // We need to get the distance of every node from our classified dot
             var chartData = data.slice(0, -1);
-            var classifyDot = data[data.length - 1];
 
             chartData.forEach(function(dot) {
                 var dRooms = x(xNormal(dot.rooms)) - x(xNormal(classifyDot.rooms));
                 var dArea = y(yNormal(dot.area)) - y(yNormal(classifyDot.area));
 
                 dot.distance = Math.sqrt(dRooms * dRooms + dArea * dArea);
+            });
+
+            chartData.sort(function(a, b) {
+                return a.distance - b.distance;
             });
 
             svg.append("g")
@@ -117,7 +123,7 @@ function Chart(ele) {
                 return color(d.rmtype);
             });
 
-            var radius = chartData[8].distance;
+            var radius = chartData[2].distance;
             var arc = d3.svg.arc()
                 .innerRadius(0)
                 .outerRadius(radius)
@@ -125,7 +131,7 @@ function Chart(ele) {
                 .endAngle(2 * Math.PI);
 
             svg.append("path")
-                .attr("opacity", 0.5)
+                .attr("opacity", 0.2)
                 .attr("d", arc)
                 .attr("transform", "translate(" + cx + "," + cy + ")");
 
@@ -152,7 +158,7 @@ function Chart(ele) {
                 .text(function(d) {
                 return d;
             });
-        });
+        };
     };
 
     // Extends an array by 10%

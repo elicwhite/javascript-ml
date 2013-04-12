@@ -5,5 +5,14 @@ window.onload = function() {
 
     var chart = new Chart(ele);
 
-    chart.load();
+    var classify;
+
+    d3.tsv("data.tsv", function(error, data) {
+        classify = chart.load(data);
+        run();
+    });
+
+    function run() {
+        classify({rooms: 6, area: 1200, rmtype: "classify"});
+    }
 };
