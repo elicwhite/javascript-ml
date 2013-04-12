@@ -28,18 +28,23 @@ function Chart(ele) {
 
 
 
-    self.load = function(input) {
+    self.load = function() {
         d3.tsv("data.tsv", function(error, data) {
+            data.forEach(function(d) {
+                d.rooms = parseInt(d.rooms, 10);
+                d.area = parseInt(d.area, 10);
+            });
+
 
             // X axis is d.sepalWidth
-            x.domain(d3.extent(data, function(d) {
-                return d.sepalWidth;
-            })).nice();
+            x.domain(extendPercent(d3.extent(data, function(d) {
+                return d.rooms;
+            })));//.nice();
 
             // y axis is d.sepalLength
-            y.domain(d3.extent(data, function(d) {
-                return d.sepalLength;
-            })).nice();
+            y.domain(extendPercent(d3.extent(data, function(d) {
+                return d.area;
+            })));//.nice();
 
             svg.append("g")
                 .attr("class", "x axis")
@@ -50,7 +55,7 @@ function Chart(ele) {
                 .attr("x", width)
                 .attr("y", -6)
                 .style("text-anchor", "end")
-                .text("Sepal Width (cm)");
+                .text("# of Rooms");
 
             svg.append("g")
                 .attr("class", "y axis")
@@ -61,7 +66,7 @@ function Chart(ele) {
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text("Sepal Length (cm)");
+                .text("Area (sq ft)");
 
             svg.selectAll(".dot")
                 .data(data)
@@ -69,13 +74,13 @@ function Chart(ele) {
                 .attr("class", "dot")
                 .attr("r", 3.5)
                 .attr("cx", function(d) {
-                return x(d.sepalWidth);
+                return x(d.rooms);
             })
                 .attr("cy", function(d) {
-                return y(d.sepalLength);
+                return y(d.area);
             })
                 .style("fill", function(d) {
-                return color(d.species);
+                return color(d.rmtype);
             });
 
 
@@ -103,4 +108,12 @@ function Chart(ele) {
             });
         });
     };
+
+    // Extends an array by 10%
+    function extendPercent(arr) {
+        var diff = arr[1] - arr[0];
+        diff = diff / 20.0;
+
+        return [arr[0] - diff / 2, arr[1] + diff / 2];
+    }
 }
