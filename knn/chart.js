@@ -13,8 +13,8 @@ function Chart(ele) {
     var width = ele.offsetWidth - margin.left - margin.right;
     var height = ele.offsetHeight - margin.top - margin.bottom;
 
-    var x = d3.scale.linear().domain([0,1]).range([0, width]);
-    var y = d3.scale.linear().domain([0,1]).range([height, 0]);
+    var x = d3.scale.linear().domain([0, 1]).range([0, width]);
+    var y = d3.scale.linear().domain([0, 1]).range([height, 0]);
 
     var xNormal = d3.scale.linear().range([0, 1]);
     var yNormal = d3.scale.linear().range([0, 1]);
@@ -39,19 +39,26 @@ function Chart(ele) {
                 d.area = parseInt(d.area, 10);
             });
 
-            var xExtended = extendPercent(d3.extent(data, function(d) {
+            var roomDomain = d3.extent(data, function(d) {
                 return d.rooms;
-            }));
-
-            var yExtended = extendPercent(d3.extent(data, function(d) {
+            });
+            var areaDomain = d3.extent(data, function(d) {
                 return d.area;
-            }));
+            });
 
-            xNormal.domain(xExtended);
-            yNormal.domain(yExtended);
+            xNormal.domain(extendPercent(roomDomain));
+            yNormal.domain(extendPercent(areaDomain));
 
-            var chartData = data.slice(0,-1);
-            var classifyDot = data.slice(-1);
+            // We need to get the distance of every node from our classified dot
+            var chartData = data.slice(0, -1);
+            var classifyDot = data[data.length - 1];
+
+            chartData.forEach(function(dot) {
+                var dRooms = x(xNormal(dot.rooms)) - x(xNormal(classifyDot.rooms));
+                var dArea = y(yNormal(dot.area)) - y(yNormal(classifyDot.area));
+
+                dot.distance = Math.sqrt(dRooms * dRooms + dArea * dArea);
+            });
 
             svg.append("g")
                 .attr("class", "x axis")
@@ -90,20 +97,37 @@ function Chart(ele) {
                 return color(d.rmtype);
             });
 
+            var cx = 0;
+            var cy = 0;
+
             svg.selectAll(".dot.classify")
-                .data(classifyDot)
+                .data([classifyDot])
                 .enter().append("circle")
                 .attr("class", "dot classify")
                 .attr("r", 3.5)
                 .attr("cx", function(d) {
-                return x(xNormal(d.rooms));
+                cx = x(xNormal(d.rooms));
+                return cx;
             })
                 .attr("cy", function(d) {
-                return y(yNormal(d.area));
+                cy = y(yNormal(d.area));
+                return cy;
             })
                 .style("fill", function(d) {
                 return color(d.rmtype);
             });
+
+            var radius = chartData[8].distance;
+            var arc = d3.svg.arc()
+                .innerRadius(0)
+                .outerRadius(radius)
+                .startAngle(0)
+                .endAngle(2 * Math.PI);
+
+            svg.append("path")
+                .attr("opacity", 0.5)
+                .attr("d", arc)
+                .attr("transform", "translate(" + cx + "," + cy + ")");
 
 
             var legend = svg.selectAll(".legend")
