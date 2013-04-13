@@ -1,0 +1,7 @@
+[{
+    "features": [2, 5, 7],
+    "value": "red"
+}, {
+    "features": [3, 7, 1],
+    "value": "green"
+}]
