@@ -42,18 +42,17 @@
         <table >
             <thead>
                 <tr>
-                    <th>Red</th>
-                    <th>Green</th>
-                    <th>Blue</th>
+                    <th>Swatch</th>
                     <th>Match</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: data">
                 
                 <tr>
-                    <td data-bind="text: features[0]"></td>
-                    <td data-bind="text: features[1]"></td>
-                    <td data-bind="text: features[2]"></td>
+                    <td>
+                        <div class="swatch" data-bind="style: {backgroundColor: 'rgb('+features[0]+', '+features[1]+', '+features[2]+')'}"></div>
+                    </td>
                     <td>
                         <div class="swatch" data-bind="style: {backgroundColor: value}"></div>
                         <span data-bind="text: value"></span>
@@ -69,9 +68,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>Red</th>
-                    <th>Green</th>
-                    <th>Blue</th>
                     <th>Swatch</th>
                     <th>Match Name</th>
                     <th>Match Swatch</th>
@@ -80,11 +76,7 @@
             </thead>
             <tbody data-bind="foreach: toClassify">
                 
-                <tr>
-                    <td data-bind="text: observeFeatures()[0]"></td>
-                    <td data-bind="text: observeFeatures()[1]"></td>
-                    <td data-bind="text: observeFeatures()[2]"></td>
-                    
+                <tr>                  
                     <td>
                         <div id="swatch" class="swatch" data-bind="style: {backgroundColor: getStyle}">
                         </div>
