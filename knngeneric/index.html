@@ -3,7 +3,15 @@
 <head>
 <title>Untitled</title>
 <style type="text/css">
+    .swatch {
+        width: 50px;
+        height: 50px;
+        border: 1px solid black;
+    }
 
+    td {
+        text-align: center;
+    }
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="knn.js"></script>
@@ -13,10 +21,28 @@
     <div id="chart">
     </div>
     
-    <div id="results">
-        <span class="label">Rooms: </span><span id="rms"></span><br />
-        <span class="label">Area: </span><span id="area"></span><br />
-        <span class="label">Is a: </span><span id="cls"></span><br />
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Red</th>
+                <th>Green</th>
+                <th>Blue</th>
+                <th>Swatch</th>
+                <th>Match</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="r"></td>
+                <td id="g"></td>
+                <td id="b"></td>
+                <td><div id="swatch" class="swatch"></div></td>
+                <td>
+                    <div id="match" class="swatch"></div>
+                    <span id="matchName"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
