@@ -1,7 +1,10 @@
 [{
-    "features": [2, 5, 7],
+    "features": [255, 0, 0],
     "value": "red"
 }, {
-    "features": [3, 7, 1],
+    "features": [0, 255, 0],
     "value": "green"
+}, {
+    "features": [0, 0, 255],
+    "value": "blue"
 }]

@@ -8,15 +8,25 @@ window.onload = function() {
         classify = knn.setData(data);
 
         run();
+        setInterval(run, 5000);
     });
 
     function run(origData) {
-        console.log(classify({
-            "features": [1, 2, 3]
-        }));
-    }
+        var r = Math.round(Math.random() * 255);
+        var g = Math.round(Math.random() * 255);
+        var b = Math.round(Math.random() * 255);
 
-    
+        var match = classify({
+            "features": [r, g, b]
+        });
+
+        document.getElementById("r").innerText = r;
+        document.getElementById("g").innerText = g;
+        document.getElementById("b").innerText = b;
+        document.getElementById("swatch").style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+        document.getElementById("match").style.backgroundColor = match;
+        document.getElementById("matchName").innerText = match;
+    }
 };
 
 /*
