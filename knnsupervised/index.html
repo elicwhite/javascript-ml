@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KNN Supervised Learner</title>
+    <style type="text/css">
+        .swatch {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            margin: auto;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        .training {
+            float: right;
+        }
+
+        .classifying {
+            float: left;
+        }
+
+        .debug { 
+            clear: both;
+        }
+
+        .matchText {
+            width: 70px;
+            text-align: center;
+        }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script data-main="scripts/main" src="scripts/require-jquery.js"></script>
+</head>
+<body>
+    <h1>Color Learning Classifier</h1>
+    <p>Training data is specified on the table on the right. There are twenty items on the left that the algorithm attempts to be match to the known values in the training data. Improve the algorithm by accepting matches. You can change the value in the textbox to another named color. <strong>(Non-named colors and bad input are not sanitized)</strong></p>
+    <div class="training">
+        <h1>Training Data</h1>
+        <table >
+            <thead>
+                <tr>
+                    <th>Red</th>
+                    <th>Green</th>
+                    <th>Blue</th>
+                    <th>Match</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: data">
+                
+                <tr>
+                    <td data-bind="text: features[0]"></td>
+                    <td data-bind="text: features[1]"></td>
+                    <td data-bind="text: features[2]"></td>
+                    <td>
+                        <div class="swatch" data-bind="style: {backgroundColor: value}"></div>
+                        <span data-bind="text: value"></span>
+                    </td>
+                    <td><button data-bind="click: $root.remove">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="classifying">
+        <h1>Classifying Data</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Red</th>
+                    <th>Green</th>
+                    <th>Blue</th>
+                    <th>Swatch</th>
+                    <th>Match Name</th>
+                    <th>Match Swatch</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: toClassify">
+                
+                <tr>
+                    <td data-bind="text: observeFeatures()[0]"></td>
+                    <td data-bind="text: observeFeatures()[1]"></td>
+                    <td data-bind="text: observeFeatures()[2]"></td>
+                    
+                    <td>
+                        <div id="swatch" class="swatch" data-bind="style: {backgroundColor: getStyle}">
+                        </div>
+                    </td>
+                    
+                    <td ><input type="text" class="matchText" data-bind="value: match" /></td>
+                    <td>
+                        <div class="swatch" data-bind="style: {backgroundColor: match}"></div>
+                    </td>
+                    <td><button data-bind="click: $root.accept">Accept</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
