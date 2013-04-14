@@ -16,7 +16,7 @@ window.onload = function() {
     var container = document.getElementById("box");
 
     var q = [];
-    for (i = 0; i < reward.length; i++) {
+    for (var i = 0; i < reward.length; i++) {
         q[i] = [];
         for (var j = 0; j < reward[0].length; j++) {
             q[i][j] = 0;
@@ -25,7 +25,7 @@ window.onload = function() {
 
     var gamma = 0.8;
 
-    var episodes = 10;
+    var episodes = 100;
 
     var goal = 5;
 
@@ -36,14 +36,14 @@ window.onload = function() {
             // Action is the number of the state to go to
             var action = getRandAction(state);
 
-            var maxQ = maxQForState(action);
-
+            var maxQ = maxQForState(action).value;
+            console.log(maxQ);
             q[state][action] = reward[state][action] + gamma * maxQ;
             state = action;
         }
     }
 
-    for (var i = 0; i < reward.length; i++) {
+    for (i = 0; i < reward.length; i++) {
         var row = document.createElement("div");
 
         for (var j = 0; j < reward[0].length; j++) {
@@ -53,7 +53,7 @@ window.onload = function() {
             cell.className = "cell";
             cell.style.backgroundColor = toColor(qValue);
 
-            if (qValue != 0) {
+            if (qValue !== 0) {
                 cell.innerText = qValue;
             }
             row.appendChild(cell);
@@ -62,9 +62,27 @@ window.onload = function() {
         container.appendChild(row);
     }
 
+    var ul = document.getElementById("paths");
 
 
-    document.getElementById("q").innerText = JSON.stringify(q);
+    // Print the shortest paths
+    for (i = 0; i < reward.length; i++) {
+        var state = i;
+
+        var path = "";
+        do {
+            path += state + " ";
+            if (state == goal) {
+                break;
+            }
+            state = maxQForState(state).action;
+        }
+        while (true);
+
+        var li = document.createElement("li");
+        li.innerText = path;
+        ul.appendChild(li);
+    }
 
 
     // Returns a random number between min inclusive and max exclusive.
@@ -85,13 +103,19 @@ window.onload = function() {
     }
 
     function maxQForState(state) {
-        var max = q[state][0];
+        var result = {
+            value: q[state][0],
+            action: 0
+        };
 
         for (var i = 1; i < q[state].length; i++) {
-            max = Math.max(max, q[state][i]);
+            if (result.value < q[state][i]) {
+                result.value = q[state][i];
+                result.action = i;
+            }
         }
 
-        return max;
+        return result;
     }
 
     console.log("loaded");
