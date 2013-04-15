@@ -37,7 +37,6 @@ window.onload = function() {
             var action = getRandAction(state);
 
             var maxQ = maxQForState(action).value;
-            console.log(maxQ);
             q[state][action] = reward[state][action] + gamma * maxQ;
             state = action;
         }
@@ -69,7 +68,7 @@ window.onload = function() {
     for (i = 0; i < reward.length; i++) {
         var state = i;
 
-        var path = "";
+        var path = "Shortest path from "+state+" to 5: ";
         do {
             path += state + " ";
             if (state == goal) {
