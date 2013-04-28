@@ -8,16 +8,14 @@ function Deck() {
 
         var ranks = new Array("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K");
         var suits = new Array("C", "D", "H", "S");
-        var i, j, k;
-        var m;
+        var i, j;
 
-        m = ranks.length * suits.length;
+        this.cards = [];
 
         // Set array of cards.
-
-        for (j = 0; j < suits.length; j++) {
-            for (k = 0; k < ranks.length; k++) {
-                this.cards.push(new Card(ranks[k], suits[j]));
+        for (i = 0; i < suits.length; i++) {
+            for (j = 0; j < ranks.length; j++) {
+                this.cards.push(new Card(ranks[j], suits[i]));
             }
         }
     };
