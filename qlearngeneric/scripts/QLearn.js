@@ -15,7 +15,7 @@ function QLearn(gamma, model) {
                 var maxQ = model.maxQForState(action).value;
 
                 var edge = model.getEdge(state, action);
-                edge.q = edge.reward + gamma * maxQ;
+                model.setQ(edge, model.getReward(edge) + gamma * maxQ);
                 state = action;
             }
         }

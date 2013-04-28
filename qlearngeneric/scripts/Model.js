@@ -96,6 +96,10 @@ function Model() {
         return result;
     };
 
+    this.setQ = function(edge, q) {
+        edge.q = q;
+    };
+
     this.getQ = function(edge) {
         if ("q" in edge) {
             return edge.q;
