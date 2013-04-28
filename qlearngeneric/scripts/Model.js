@@ -109,7 +109,7 @@ function Model() {
 
     this.getReward = function(edge) {
         return edge.reward;
-    }
+    };
 
     this.getStates = function() {
         return states;
