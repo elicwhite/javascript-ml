@@ -4,46 +4,42 @@ function QLearn(gamma, model) {
     this.learn = function(episodes) {
         var state;
 
+        // 1 means random player, 2 means q-learner
+        var whoseTurn = 1;
+
+
         // learn by running randomly episodes number of times
         for (var episode = 0; episode < episodes; episode++) {
-            state = model.getRandomState();
+            state = model.getStartState();
 
             while (!model.isGoal(state)) {
-                // Action is the state to go to
-                var action = model.getRandAction(state);
+                if (whoseTurn == 1) {
+                    var options = state.getActions(1);
+                    state = new State(options[rand(0, options.length)]);
 
-                var maxQ = model.maxQForState(action).value;
+                    whoseTurn = 2;
+                } else {
+                    // Action is the state to go to
+                    var action = model.getRandAction(state);
 
-                var edge = model.getEdge(state, action);
-                model.setQ(edge, model.getReward(edge) + gamma * maxQ);
-                state = action;
-            }
-        }
-    };
+                    var maxQ = model.maxQForState(action).value;
 
-    this.display = function() {
-        var ul = document.getElementById("paths");
-        var state;
+                    var edge = model.getEdge(state, action);
 
-        var states = model.getStates();
+                    var q = model.getReward(edge) + gamma * maxQ;
+                    if (q > 0) {
+                        model.setQ(edge, q);
+                    }
 
-        // Print the shortest paths
-        for (var start = 0; start < states.length; start++) {
+                    state = action;
 
-            state = start;
-            var path = "Shortest path from " + state + ": ";
-            do {
-                path += state + " ";
-                if (model.isGoal(state)) {
-                    break;
+                    whoseTurn = 1;
                 }
-                state = model.maxQForState(state).action;
             }
-            while (true);
-
-            var li = document.createElement("li");
-            li.innerText = path;
-            ul.appendChild(li);
         }
     };
+
+    function rand(min, max) {
+        return Math.round(Math.random() * (max - 1 - min) + min);
+    }
 }

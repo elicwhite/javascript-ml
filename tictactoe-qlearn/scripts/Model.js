@@ -1,14 +1,19 @@
 // A simple Q Learning model
 
 function Model() {
+    "use strict";
+
+    this.qValues = {};
+
     // Start state is an empty board
     this.getStartState = function() {
-        return [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        return new State([0, 0, 0, 0, 0, 0, 0, 0, 0]);
     };
 
     this.getRandAction = function(state) {
-        var options = state.getActions();
-        return options[rand(0, options.length)];
+        var options = state.getActions(2);
+        var option = options[rand(0, options.length)];
+        return new State(option);
     };
 
     this.getEdge = function(from, to) {
@@ -21,41 +26,49 @@ function Model() {
     };
 
     this.getReward = function(edge) {
-        var result = state.isTerminal();
+        var result = edge.isTerminal();
+
         if (result == "gameover") {
-            return 10;
+            return 100;
         } else if (result == "tie") {
-            return 1;
+            return 10;
         } else {
             return 0;
         }
     };
 
     this.maxQForState = function(state) {
-        var options = state.getActions();
+        var options = state.getActions(2);
 
 
-        var result = options[0];
+        var bestOption = options[0];
 
         for (var i = 1; i < options.length; i++) {
-            if (result.q < options[i].q) {
-                result = options[i];
+            if (this.qValues[bestOption.toString()] < this.qValues[options[i].toString()]) {
+                bestOption = options[i];
             }
         }
+
+        var sObj = new State(bestOption);
+        var result = {
+            action: sObj,
+            value: this.getQ(sObj)
+        };
 
         return result;
     };
 
     this.setQ = function(edge, q) {
-        edge.q = q;
+        this.qValues[edge.toString()] = q;
     };
 
     this.getQ = function(edge) {
-        return edge.q;
+        if (edge.toString() in this.qValues) {
+            return this.qValues[edge.toString()];
+        }
+
+        return 0;
     };
-
-
-    // Returns a random number between min inclusive and max exclusive.
 
     function rand(min, max) {
         return Math.round(Math.random() * (max - 1 - min) + min);

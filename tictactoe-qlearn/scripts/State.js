@@ -1,4 +1,5 @@
 function State(arr) {
+    "use strict";
     /*
     arr should be an array with 9 items to represent a 3x3 grid
     The indexes of the array make the grid look like:
@@ -12,20 +13,18 @@ function State(arr) {
 
     // The computer is ALWAYS 2.
 
-    this.q = 0;
-
     this.toString = function() {
         return arr;
     };
 
-    this.getActions = function() {
+    this.getActions = function(player) {
         var options = [];
 
         for (var i = 0; i < 9; i++) {
             // If spot i isn't taken, it's a possible move
             if (arr[i] === 0) {
-                var clone = myArray.slice(0);
-                clone[i] = 2;
+                var clone = arr.slice(0);
+                clone[i] = player;
                 options.push(clone);
             }
 
