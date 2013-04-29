@@ -1,0 +1,33 @@
+.cell {
+    width: 40px;
+    height: 40px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    float: left;
+    text-align: center;
+    line-height: 40px;
+}
+
+#box {
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    float: left;
+}
+
+.X {
+    background-color: red;
+}
+.X:before {
+    content: "X";
+}
+
+.O {
+    background-color: green;
+}
+.O:before {
+    content: "O";
+}
+
+#whoseTurn {
+    clear: both;
+}

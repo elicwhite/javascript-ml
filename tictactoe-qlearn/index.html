@@ -2,37 +2,32 @@
 <html>
 <head>
 <title>Untitled</title>
-<style type="text/css">
-    .cell {
-        width: 40px;
-        height: 40px;
-        border-right: 1px solid black;
-        border-bottom: 1px solid black;
-        float: left;
-        text-align: center;
-        line-height: 40px;
-    }
-    #box {
-        border-left: 1px solid black;
-        border-top: 1px solid black;
-        float: left;
-    }
-
-    #q {
-        clear: both;
-    }
-
-    #paths {
-        clear: both;
-    }
-</style>
+<link type="text/css" rel="stylesheet" href="styles/styles.css"></style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <script src="scripts/State.js"></script>
 <script src="scripts/Model.js"></script>
 <script src="scripts/QLearn.js"></script>
 <script src="scripts/script.js"></script>
 </head>
 <body>
-    <ul id="paths">
-    </ul>
+    <div id="box">
+        <div class="row">
+            <div class="cell" id="0"></div>
+            <div class="cell" id="1"></div>
+            <div class="cell" id="2"></div>
+        </div>
+        <div class="row">
+            <div class="cell" id="3"></div>
+            <div class="cell" id="4"></div>
+            <div class="cell" id="5"></div>
+        </div>
+        <div class="row">
+            <div class="cell" id="6"></div>
+            <div class="cell" id="7"></div>
+            <div class="cell" id="8"></div>
+        </div>
+    </div>
+
+    <p id="whoseTurn"></p>
 </body>
 </html>
