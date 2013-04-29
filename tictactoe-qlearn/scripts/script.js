@@ -8,16 +8,20 @@ window.onload = function(gamma) {
     var learner = new QLearn(0.8, model);
 
     //300,000 =>       2909
-    //200,000 =>       2904
-    //100,000 => 5991, 2863
-    // 10,000 => 4903, 1937
-    //  1,000 => 1775, 523
-    //    100 => 289, 60
+    //200,000 =>       2904, 425
+    //100,000 => 5991, 2863, 425
+    // 70,000 =>            425
+    // 30,000 =>            424
+    // 10,000 => 4903, 1937, 406
+    //  1,000 => 1775, 523, 315
+    //    100 => 289, 60, 40
     learner.learn(10000);
-    console.log(Object.keys(model.qValues).length);
+    console.log(Object.keys(model.qValues).length+" states with non-zero q-values");
 
     $(".cell").click(function() {
-        clickPiece(this);
+        if (this.id.indexOf("q") == -1) {
+            clickPiece(this);
+        }
     });
 
     function newGame() {

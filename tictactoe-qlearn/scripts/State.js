@@ -34,66 +34,44 @@ function State(arr) {
     };
 
     this.isTerminal = function() {
-        var i, j;
+        var winner = 0;
 
+        // check rows
+        if (arr[0] && arr[0] == arr[1] && arr[0] == arr[1]) {
+            winner = arr[0];
+        } else if (arr[3] && arr[3] == arr[4] && arr[3] == arr[5]) {
+            winner = arr[3];
+        } else if (arr[6] && arr[6] == arr[7] && arr[6] == arr[8]) {
+            winner = arr[6];
+        }
+        // Check columns
+        else if (arr[0] && arr[0] == arr[3] && arr[0] == arr[6]) {
+            winner = arr[0];
+        } else if (arr[1] && arr[1] == arr[4] && arr[1] == arr[7]) {
+            winner = arr[1];
+        } else if (arr[2] && arr[2] == arr[5] && arr[2] == arr[8]) {
+            winner = arr[2];
+        }
+        // check diags
+        else if (arr[0] && arr[0] == arr[4] && arr[0] == arr[8]) {
+            winner = arr[0];
+        } else if (arr[6] && arr[6] == arr[4] && arr[6] == arr[2]) {
+            winner = arr[6];
+        }
+
+        if (winner) return winner + " wins";
+
+        // we don't have a winner, is every spot taken?
         var spotLeft = false;
-
-        // check the rows
-        for (i = 0; i < 9; i += 3) {
-            for (j = i; j < i + 3; j++) {
-                if (arr[i + j] != 2) {
-                    break;
-                }
-
-                if (j == 2) {
-                    return "gameover";
-                }
-            }
-        }
-
-        // check the cols
-        for (i = 0; i < 3; i++) {
-            for (j = i; j < 9; j += 3) {
-                if (arr[i + j] != 2) {
-                    break;
-                }
-
-                if (j == 2) {
-                    return "gameover";
-                }
-            }
-        }
-
-        // check the diag one
-        for (i = 0; i < 3; i++) {
-            if (arr[i + (3 * i)] != 2) {
-                break;
-            }
-
-            if (i == 2) {
-                return "gameover";
-            }
-        }
-
-        // check other diag
-        for (i = 0; i < 3; i++) {
-            if (arr[6 - (2 * i)] != 2) {
-                break;
-            }
-
-            if (i == 2) {
-                return "gameover";
-            }
-        }
-
-        // Is the board full?
-        for (i = 0; i < 9; i++) {
+        for (var i = 0; i < 9; i++) {
             if (arr[i] === 0) {
-                return false;
+                spotLeft = true;
+                break;
             }
         }
 
-        // It's all taken!
+        if (spotLeft) return false;
+
         return "tie";
     };
 }

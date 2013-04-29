@@ -28,8 +28,12 @@ function Model() {
     this.getReward = function(edge) {
         var result = edge.isTerminal();
 
-        if (result == "gameover") {
-            return 100;
+        if (result == "1 wins") {
+            //console.log(result);
+            return -20; // lose
+        } else if (result == "2 wins") {
+            //console.log(result);
+            return 100; // win
         } else if (result == "tie") {
             return 10;
         } else {
@@ -44,7 +48,7 @@ function Model() {
         var bestOption = options[0];
 
         for (var i = 1; i < options.length; i++) {
-            if (this.qValues[bestOption.toString()] < this.qValues[options[i].toString()]) {
+            if (this.getQ(bestOption) < this.getQ(options[i])) {
                 bestOption = options[i];
             }
         }

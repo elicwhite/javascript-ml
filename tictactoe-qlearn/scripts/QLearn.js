@@ -5,12 +5,16 @@ function QLearn(gamma, model) {
         var state;
 
         // 1 means random player, 2 means q-learner
-        var whoseTurn = 1;
+        var whoseTurn;
+
+        var p1Won = 0;
+        var p2Won = 0;
 
 
         // learn by running randomly episodes number of times
         for (var episode = 0; episode < episodes; episode++) {
             state = model.getStartState();
+            whoseTurn = 1;
 
             while (!model.isGoal(state)) {
                 if (whoseTurn == 1) {
@@ -36,7 +40,15 @@ function QLearn(gamma, model) {
                     whoseTurn = 1;
                 }
             }
+
+            if (whoseTurn == 2) {
+                p1Won++;
+            } else {
+                p2Won++;
+            }
         }
+
+        console.log("1: "+p1Won+", 2: "+p2Won);
     };
 
     function rand(min, max) {
