@@ -30,7 +30,7 @@ function Model() {
 
         if (result == "1 wins") {
             //console.log(result);
-            return -20; // lose
+            return -200; // lose
         } else if (result == "2 wins") {
             //console.log(result);
             return 100; // win
@@ -42,6 +42,15 @@ function Model() {
     };
 
     this.maxQForState = function(state) {
+        // In this case, the max q for a terminal state is whatever it's own reward is
+        var reward = this.getReward(state);
+        if (reward) {
+            return {
+                action: state,
+                value: reward
+            };
+        }
+
         var options = state.getActions(2);
 
 
