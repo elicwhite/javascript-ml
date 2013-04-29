@@ -16,7 +16,7 @@ window.onload = function(gamma) {
     //  1,000 => 1775, 523, 315
     //    100 => 289, 60, 40
     learner.learn(10000);
-    console.log(Object.keys(model.qValues).length+" states with non-zero q-values");
+    console.log(Object.keys(model.qValues).length + " states with non-zero q-values");
 
     $(".cell").click(function() {
         if (this.id.indexOf("q") == -1) {
@@ -50,6 +50,11 @@ window.onload = function(gamma) {
         } else {
             $(ele).addClass("O");
         }
+        if (new State(state).isTerminal()) {
+            alert("game over");
+            return;
+        }
+
 
         if (whoseTurn == 1) {
             whoseTurn = 2;
@@ -60,10 +65,28 @@ window.onload = function(gamma) {
     }
 
     function compMove() {
+        var i;
         var s = new State(state);
+
+        // clear the displayed actions:
+        for (i = 0; i < 9; i++) {
+            document.getElementById("q" + i).innerHTML = "";
+        }
+
+        var actions = s.getActions(2);
+        for (var action = 0; action < actions.length; action++) {
+            for (i = 0; i < 9; i++) {
+                if (actions[action][i] == 2 && state[i] != 2) {
+                    // compouter chose position i
+                    document.getElementById("q" + i).innerHTML = model.getQ(actions[action]);
+                }
+            }
+        }
+
+
         var newState = model.maxQForState(s).action.toString();
 
-        for (var i = 0; i < 9; i++) {
+        for (i = 0; i < 9; i++) {
             if (newState[i] == 2 && state[i] != 2) {
                 // compouter chose position i
                 set(i, 2);
